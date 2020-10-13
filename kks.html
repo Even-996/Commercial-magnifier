@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>商品放大镜</title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			.box{
+				border: 1px solid #ccc;
+				width: 400px;
+				height: 400px;
+				margin: 80px;
+				position: relative;
+			}
+			.img-first{
+				position: absolute;
+				top: 25px;
+				left: 25px;
+			}
+			.small-box{
+				position: absolute;
+				width: 300px;
+				height: 300px;
+				background-color: lightgoldenrodyellow;
+				opacity: .5;
+				cursor: move;
+				display: none;
+				border: 1px solid #eee;
+			}
+			.big-box{
+				position: absolute;
+				top: -1px;
+				left: 400px;
+				width: 500px;
+				height: 500px;
+				border: 1px solid #ccc;
+				overflow: hidden;
+				display: none;
+			}
+			.big-img{
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<img src="images/kks.jpg" class="img-first" >
+			<div class="small-box"></div>
+			<div class="big-box">
+				<img src="images/kks.big.jpg" class="big-img">
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		let box=document.querySelector('.box');
+		let small=document.querySelector('.small-box');
+		let big=document.querySelector('.big-box');
+		let bigimg=document.querySelector('.big-img');
+		//当鼠标经过box时两个方框显示
+		box.addEventListener('mouseover',function(){
+			small.style.display='block';
+			big.style.display='block';
+		});
+		box.addEventListener('mouseout',function(){
+			small.style.display='none';
+			big.style.display='none';
+		});
+		//鼠标在box中移动时，small-box跟随移动
+		box.addEventListener('mousemove',function(e){
+			  let x= e.pageX - box.offsetLeft;
+			  let y= e.pageY - box.offsetTop;
+			  console.log(x,y);
+			  
+			  let smallX=x - small.offsetWidth/2 ;
+			  let smallY=y - small.offsetHeight/2 ;
+			  //遮挡层的最大移动距离
+			  let gap =box.offsetWidth-small.offsetWidth;
+			  
+			  if(smallX <= 0){
+			  	  smallX =0;
+			  }else if(smallX >= gap){
+				  smallX=gap;
+			  };
+			  if(smallY <= 0){
+			  	  smallY =0;
+			  }else if(smallY >= gap){
+			  	  smallY=gap;
+			  };
+			  
+			  small.style.left = smallX +'px';
+			  small.style.top = smallY +'px';
+	    //鼠标在移动small-box移动时，big-box跟随移动
+		//大图的最大移动距离
+			let bigmax=bigimg.offsetWidth - big.offsetWidth ;
+		//大图的移动距离
+		    let bigX=smallX * bigmax /gap;
+			let bigY=smallY * bigmax /gap;
+			bigimg.style.left = - bigX +'px';
+			bigimg.style.top = - bigY +'px';
+		})
+	</script>
+</html>
